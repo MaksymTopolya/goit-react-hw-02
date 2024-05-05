@@ -18,6 +18,7 @@ const localStorageFeedback = () => {
    
 };
 
+
 function App() {
     const [feedback, setFeedback] = useState(localStorageFeedback);
 
@@ -26,7 +27,10 @@ function App() {
     }, [feedback]);
 
     const updateFeedback = feedbackType => {
-        setFeedback(prevFeedback => ({ ...prevFeedback, [feedbackType]: prevFeedback[feedbackType] + 1 }));
+      setFeedback(prevFeedback => ({
+        ...prevFeedback,
+        [feedbackType]: prevFeedback[feedbackType] + 1
+      }));
     };
 
     const reset = () => {
@@ -39,13 +43,14 @@ function App() {
     };
 
     const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+    const positiveFeedback = Math.round((feedback.good / totalFeedback) * 100)
 
     return (
         <div>
             <Description />
             <Options OnFeedback={updateFeedback} totalFeedbacks={totalFeedback} onReset={reset} />
             {totalFeedback > 0 ?
-                <Feedback feedback={feedback} totalFeedback={totalFeedback} />
+                <Feedback feedback={feedback} totalFeedback={totalFeedback} positiveFeedback={positiveFeedback} />
                 :
                 <Notification message="No feedback given yet" />
             }
